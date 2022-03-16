@@ -5,8 +5,6 @@ import 'package:cadycoder/screens/add_mp3.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:audio_session/audio_session.dart';
 
 
 
@@ -19,7 +17,7 @@ class Mp3List extends StatefulWidget {
 
 class _Mp3ListState extends State<Mp3List> {
   Database? db;
-  final _player = AudioPlayer();
+  bool isloading = true;
 
 
   List docs = [];
@@ -29,6 +27,7 @@ class _Mp3ListState extends State<Mp3List> {
     db!.read().then((value) => {
       setState(() {
         docs = value;
+        isloading = false;
       })
     });
   }
@@ -37,28 +36,9 @@ class _Mp3ListState extends State<Mp3List> {
   void initState() {
     super.initState();
     initialise();
-
-    _init();
   }
 
-  Future<void> _init() async {
-    // Inform the operating system of our app's audio attributes etc.
-    // We pick a reasonable default for an app that plays speech.
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
-    // Listen to errors during playback.
-    _player.playbackEventStream.listen((event) {},
-        onError: (Object e, StackTrace stackTrace) {
-          print('A stream error occurred: $e');
-        });
-    // Try to load audio from a source and catch any errors.
-    try {
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3")));
-    } catch (e) {
-      print("Error loading audio source: $e");
-    }
-  }
+
 
 
 
@@ -70,7 +50,7 @@ class _Mp3ListState extends State<Mp3List> {
         title: Text("Mp3 List"),
       ),
 
-      body: ListView.builder(
+      body: isloading ?Center(child:CircularProgressIndicator()) :ListView.builder(
         itemCount: docs.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -80,16 +60,27 @@ class _Mp3ListState extends State<Mp3List> {
 
               },
               contentPadding: EdgeInsets.only(right: 30, left: 36),
-              title: Text(docs[index]['name']),
+              title: Column(
+                children: [
+                  Text(docs[index]['name']),
+                  InkWell(
+                    child: Text(docs[index]['url'],style: TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.underline,
+                    ),),
+                  ),
+                ],
+              ),
               trailing:  IconButton(
                   onPressed: (){
-                    _init();
-
+                   db!.delete(docs[index]['id']);
                     Scaffold.of(context).showSnackBar(new SnackBar(
-                        content: new Text("Playing Please wait")
+                        content: new Text("Removing")
+
                     ));
+                    initialise();
                   },
-                   icon:Icon(Icons.play_arrow),),
+                   icon:Icon(Icons.delete),),
 
             ),
           );

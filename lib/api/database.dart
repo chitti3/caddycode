@@ -19,13 +19,13 @@ class Database {
     }
   }
 
-/*   Future<void> delete(String id) async {
+   Future<void> delete(String id) async {
     try {
-      await firestore.collection("mp3list").doc(id).delete();
+      await firestore!.collection("mp3list").doc(id).delete();
     } catch (e) {
       print(e);
     }
-  }*/
+  }
 
   Future<dynamic> read() async {
     QuerySnapshot querySnapshot;
@@ -37,7 +37,7 @@ class Database {
         print("ddd");
         print(querySnapshot.docs.toString());
         for (var doc in querySnapshot.docs.toList()) {
-          Map a = {"id": doc.id, "name": doc['name']};
+          Map a = {"id": doc.id, "name": doc['name'],"url":doc['url']};
           docs.add(a);
         }
         return docs;
