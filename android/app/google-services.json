@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "925754698539",
+    "project_id": "caddycoder-1847d",
+    "storage_bucket": "caddycoder-1847d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:925754698539:android:e54c972dbd14921e4f736e",
+        "android_client_info": {
+          "package_name": "com.example.cadycoder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "925754698539-7tc5chmbh5okmcgmrmp3lk6612t3k7t7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5OHlbrjRX8W4iX3BzeMAE-7eHmZmgo5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "925754698539-7tc5chmbh5okmcgmrmp3lk6612t3k7t7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
